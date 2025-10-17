@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: frontend-project
+  namespace: argocd
+
+spec:
+  description: this project holds a new frontend app
+  sourceRepos:
+    - https://github.com/Tasmiya4280/argocd-demos.git  
+  destinations:
+    - namespace: frontend
+      server: https://172.20.0.4:6443 
+  clusterResourceWhitelist:    # Which cluster-wide resources are allowed (e.g., CRDs)
+    - group: "*"               # '*' means allow all groups
+      kind: "*"                # '*' means allow all kinds
+  namespaceResourceWhitelist:  # Which namespace-level resources are allowed
+    - group: "*"               # Here also allowing everything
+      kind: "*"
+  roles:                       # Define roles for RBAC within this Project
+    - name: frontend-admins    # Role name  
+      description: Admins for frontend project
+      policies:                # Policies associated with this role
+        # syntax: - p, proj:<project-name>:<role-name>, applications, <action>, <project>/<app-name>, permission(allow|deny)
+        - p, proj:frontend-project:frontend-admins, applications, *, frontend-project/*, allow       
