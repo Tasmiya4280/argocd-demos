@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpenv-service
+spec:
+  selector:
+    app: httpenv
+  ports:
+    - port: 80          # Exposed service port
+      targetPort: 8888  # Container's internal port
+  type: ClusterIP       # You can change to NodePort or LoadBalancer if needed
